@@ -1,16 +1,16 @@
 # preparation
 library(tidyverse)
 
-str(df_outcome)
-
-
-df_outcome <- df_outcome |>
-  mutate(m_4yrgrads = as.numeric(m_4yrgrads)*0.01) 
-  
 # calculate gross graduation rate
-df_outcome <- df_outcome |>
-  mutate(m_4yrgrads = as.numeric(m_4yrgrads)) |>
-  summarise(
-    mean_gradrate_between_male_and_female = mean(m_4yrgrads+w_4yrgrads, na.rm = TRUE)
-  )
-
+outcome_data <- outcome_data |>
+  mutate(
+    m_4yrgrads = as.numeric(m_4yrgrads),
+    men_gradrate_4yr = m_4yrgrads / m_cohortsize,
+    totcohortsize = as.numeric(totcohortsize),
+    total_4yrgrads = m_4yrgrads + w_4yrgrads,
+    total_gradrate_4yr = total_4yrgrads / totcohortsize,
+    men_gradrate_4yr = round(men_gradrate_4yr, 3),
+    women_gradrate_4yr = round(women_gradrate_4yr, 3),
+    total_gradrate_4yr = round(total_gradrate_4yr, 3)
+    ) |> 
+  filter(!is.na(men_gradrate_4yr) & !is.na(women_gradrate_4yr) & !is.na(total_gradrate_4yr))

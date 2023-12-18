@@ -7,20 +7,21 @@ library(stringr)
 dir_path_covariates_data <- paste0(dir_path_raw, "covariates/covariates.xlsx")
 
 # Load data
-df_covariates <- read_excel(dir_path_covariates_data)
+covariates_ready <- read_excel(dir_path_covariates_data)
 
 # change the name of the column
-df_covariates <- df_covariates |> 
+covariates_ready <- covariates_ready |> 
   rename(
     unitid = university_id
   )
 
 # delete "aaaa" from unitid
-df_covariates$unitid <- str_remove(df_covariates$unitid, "aaaa")
+covariates_ready$unitid <- str_remove(covariates_ready$unitid, "aaaa")
 
 # make df wider
-df_covariates_wide <- df_covariates |> 
+covariates_ready <- covariates_ready |> 
   pivot_wider(
     names_from = category,
     values_from = value
   )
+
