@@ -1,0 +1,1 @@
+data <- readr::read_csv("class_attendance.csv")
