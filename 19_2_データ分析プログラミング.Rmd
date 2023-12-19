@@ -1,0 +1,86 @@
+---
+title: "19 データ分析プログラミング (3)"
+# subtitle: "サブタイトル"
+author: '花澤楓 学籍番号: 2125242'
+date: "`r format(Sys.time(), '%Y/%m/%d')`"
+output: 
+  pdf_document:
+    latex_engine: lualatex
+    # toc: true
+    toc_depth: 3
+    number_section: true
+documentclass: bxjsarticle
+classoption:
+  - pandoc
+  - jafont=haranoaji
+---
+
+# 図の作成
+図表は目的（何を見せたいのか）に応じて様々な種類がある。目的は大きく分けて4つで、1.比較、 2.分布、 3.関係性、 4.構成（Composition）がある。図の文法（grammar of graphics）に従い、データの各変数を*視覚的な要素*に対応づけることが求められる。よって、図表は各変数から視覚的情報への関数のようなもの。
+
+視覚的な要素とは、以下の通り。
+
+- 位置：x軸、y軸。座標軸（直交座標・デカルト座標、円形など）に「形」としてデータを配置するため
+- 大きさ：強調したいデータは大きくするなど
+- 形：各groupごとにプロットの形（丸、三角、四角など）を変えるなど
+- 色：寒色系と暖色系のよい組み合わせを選び、色弱・色盲の方への配慮も必要
+- ラベルづけ
+
+Rには、`ggplot2`パッケージが用意されており、`base R`での`plot`よりも、より柔軟性がある関数でかつデフォルトの状態でプロットしても綺麗に見えやすいことからよく利用されている。また、特徴として図を段階的に重ねていくようなイメージで作成できる。まず、ベースとなる座標軸を用意し、データを重ね、ラインを引き、ラベル付けをする、といったイメージ。
+
+以下に、`iris`データを使用して`ggplot2`の使用例を示す。
+
+```{r, include=FALSE}
+library(ggplot2)
+library(tidyverse)
+```
+
+```{r}
+plot_object <- ggplot(data = iris,
+                      mapping = aes(x = Sepal.Length,
+                                    y = Sepal.Width,
+                                    color = Species,
+                                    shape = Species)) +
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_classic()
+
+plot_object <- plot_object + 
+  labs(title = "correlation between sepal length and sepal width.")
+
+plot_object
+```
+
+図を保存する際には、.pngでなく.pdfで保存することで、数式として埋め込まれるので拡大しても荒くならない。そのため、論文やレポートに示す際には.pdfが推奨される。
+
+
+また、同じデータから生成されるグラフでも、見せ方の違いによって図やグラフを見る人の受ける印象が全く異なる。
+
+例えば、先ほどの`iris`データにおいてSepal widthとlengthの関係を見る際に、Speciesごとに分類分けしないでプロット・回帰直線の表示をすると、
+
+```{r}
+plot_object <- ggplot(data = iris,
+                      mapping = aes(x = Sepal.Length,
+                                    y = Sepal.Width)) +
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_classic() + 
+  labs(title = "correlation between sepal length and sepal width.")
+
+plot_object
+```
+となる。このグラフだけを見ると、ほとんど相関していないように見え、実際に相関係数を計算すると、
+```{r}
+cor(iris$Sepal.Length, iris$Sepal.Width)
+```
+負の相関係数となっている。相関係数をSpeciesごとに計算すると、
+```{r}
+correlation_by_species <- iris %>%
+  group_by(Species) %>%
+  summarize(correlation_coefficient = cor(Sepal.Length, Sepal.Width))
+
+correlation_by_species
+```
+と、いずれも正の相関が見られる。これは、先ほどのSpeciesごとに分類した上で回帰直線を引いているグラフを見れば明らか。このように、同じデータでも全く異なる見せ方ができてしまうので正しい倫理観のもと研究内容を報告すべきである。
+
+

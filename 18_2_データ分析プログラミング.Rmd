@@ -1,0 +1,133 @@
+---
+title: "18 データ分析プログラミング（2）"
+# subtitle: "サブタイトル"
+author: '花澤楓 学籍番号: 2125242'
+date: "`r format(Sys.time(), '%Y/%m/%d')`"
+output: 
+  pdf_document:
+    latex_engine: lualatex
+    # toc: true
+    toc_depth: 3
+    number_section: true
+documentclass: bxjsarticle
+classoption:
+  - pandoc
+  - jafont=haranoaji
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 関数（function）の活用
+プログラミングにおける関数とは、コードをひとまとめにしたもの。プログラミングの目的に応じて、適切な関数を作成することでコードの冗長性を防ぐことができる。また、関数名を「コメント」として使うことでより可読性が高まる。関数を用いてコードを分割することで、どの箇所でエラーが出ているかなど、非常にわかりやすくなるようなメリットがある。また、関数内で作成された変数は関数内でのローカル変数となるため、関数外のコードに影響を与えない。そのため、意図しない挙動をすることを防ぐことができる。
+
+プログラミング言語には様々な人が作成した関数を使用することもできるが、自作で作成することももちろん可能である。Rでは、コブダグラス型関数の値を返す関数を以下のように作成する。
+
+```{r}
+  calculate_cobb_douglas <- function(K, L){
+    alpha <- 1/3
+    A <- 1000
+    Y <- A*(K^alpha)*(L^(1-alpha))
+    return (Y)
+  }
+  
+  Y <- calculate_cobb_douglas(K=100, L=200)
+  Y
+```
+
+関数は、引数（argument）、戻り値（outocome）で構成される。
+
+R言語=`object-based functional-style program`で、R上に存在するものはオブジェクトと認識される。関数もオブジェクトと認識されるため、関数を引数として受け取るような関数である「高階関数」といった便利なものも使用できる。例えば、あるリストにあるベクトルの値を2倍にするコードを考える。for文を使用する場合は以下のようになる。
+
+```{r}
+# リストを作成
+my_list <- list(a = c(1, 2, 3), b = c(4, 5, 6), c = c(7, 8, 9))
+
+# リスト内の各ベクトルを2倍にする
+for (i in 1:length(my_list)) {
+  my_list[[i]] <- my_list[[i]] * 2
+}
+my_list
+```
+
+高階関数である`purrr::map`を使用すると、以下の通り。
+
+```{r}
+my_list <- list(a = c(1, 2, 3), b = c(4, 5, 6), c = c(7, 8, 9))
+
+my_list <- purrr::map(my_list, ~ .x * 2)
+my_list
+```
+
+# データの整理・変換のためのtidyverseパッケージ群の関数
+
+dplyrには、あるデータセットに対する操作ができるコマンド（関数）が複数ある。例えば、以下の通り。
+
+1. 列ごと：
+    - `mutate`
+    - `select`
+2. 行ごと：`filter`, `arrange`
+3. グループごと：`group_by`, `summarize`
+4. データフレーム（`df1`, `df2`とする）を結合させる：
+    - `left_join`: `by=...`をkeyとしてデータフレームを結合
+    - `bind_rows`: データフレームdf1, df2を単純に結合させる
+
+これらのコマンドの使用例を以下に示す。
+
+```{r, echo=3, include=FALSE}
+library(tidyverse)
+library(here)
+test_score <- read_csv(here("Peanuts-Data-Project","02_raw","test_score","data","James Street Elementary School Tests.csv"))
+```
+
+```{r, eval=FALSE}
+test_score <- read_csv(here("Peanuts-Data-Project","02_raw",
+                            "test_score","data",
+                            "James Street Elementary School Tests.csv"))
+```
+
+```{r}
+# mutate()とselect()を使って新しい列を生成・抽出
+test_score_1 <- test_score |> mutate(
+  average_math_sep = mean(Math_Sept)) |>
+    select(Student_ID, average_math_sep)
+# wide型のデータフレームに対して実行したのであまり意味がない
+test_score_1
+```
+
+```{r}
+# fileter()とarrange()を使って行の抽出・並べ替えを行う
+test_score_2 <- test_score |> filter(
+  Math_Sept >= 80
+)
+test_score_2 # septemberのmath scoreが80点以上なのは1人だった
+```
+
+また、パイプ演算子`%>%`（or `|>`）を用いることで、コードの可読性をあげられる例を以下に示す。
+
+1. 中間データを記述する場合
+
+```{r, eval=FALSE}
+gdp_japan <- dplyr::filter(gdp_world_annual, country == "JPN")
+gdp_japan2 <- dplyr::group_by(gdp_japan, decade)
+gdp_japan_decade <- dplyr::summarize(gdp_japan2, 
+                                     avg_gdp = mean(gdp))
+gdp_japan_decade2 <- dplyr::ungroup(gdp_japan_decade) 
+```
+
+2. パイプ演算子を用いる場合
+
+```{r, eval=FALSE}
+gdp_japan_decade <- gdp_world_annual %>%
+               dplyr::filter(country == "JPN") %>%
+               dplyr::group_by(decade) %>%
+               dplyr::summarize(avg_gdp = mean(gdp)) %>%
+               dplyr::ungroup()
+```
+
+
+
+
+
+

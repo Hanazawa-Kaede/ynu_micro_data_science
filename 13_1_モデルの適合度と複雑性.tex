@@ -1,0 +1,267 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  pandoc,
+  jafont=haranoaji]{bxjsarticle}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={13 モデルの適合度と複雑性（１）},
+  pdfauthor={花澤楓 学籍番号: 2125242},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{13 モデルの適合度と複雑性（１）}
+\author{花澤楓 学籍番号: 2125242}
+\date{2023/12/04}
+
+\begin{document}
+\maketitle
+
+\hypertarget{ux30e2ux30c7ux30ebux306eux9069ux5408fitux3068ux8907ux96d1ux6027complexity}{%
+\section{モデルの適合（fit）と複雑性（complexity）}\label{ux30e2ux30c7ux30ebux306eux9069ux5408fitux3068ux8907ux96d1ux6027complexity}}
+
+\hypertarget{ux3064ux306eux6587ux5316}{%
+\subsection{2つの文化}\label{ux3064ux306eux6587ux5316}}
+
+情報通信産業の発達により分析できるデータの数が指数関数的に増加している。そのため、データに当てはまりが良いモデルを考える際に線形回帰を仮定する必要は必ずしもなく、非線形モデルを適合させた方がより当てはまりが良い場合が多い。例えば、以下のようなデータを考える。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# sinxにノイズを追加したデータセットの生成}
+\CommentTok{\# サンプル数}
+\NormalTok{n }\OtherTok{\textless{}{-}} \DecValTok{20}
+
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{2}\SpecialCharTok{*}\NormalTok{pi, }\AttributeTok{length.out =}\NormalTok{ n)}
+\NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{sin}\NormalTok{(x) }\SpecialCharTok{+} \FunctionTok{rnorm}\NormalTok{(n, }\AttributeTok{sd =} \FloatTok{0.2}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(x, y)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{13_1_モデルの適合度と複雑性_files/figure-latex/unnamed-chunk-1-1.pdf}
+
+このとき、線形回帰モデルと非線形回帰モデルをそれぞれを当てはめると以下のようになる。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(x, y)}
+\CommentTok{\# 線形回帰モデルによって当てはめ}
+\NormalTok{OLS\_model }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ x, }\AttributeTok{data =}\NormalTok{ df)}
+\NormalTok{OLS\_r2 }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(OLS\_model)}\SpecialCharTok{$}\NormalTok{r.squared}
+\NormalTok{OLS }\OtherTok{\textless{}{-}}\NormalTok{ df }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(x, y)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =} \StringTok{"lm"}\NormalTok{, }\AttributeTok{se=}\ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ggtitle}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{"R\^{}2 = "}\NormalTok{, }\FunctionTok{round}\NormalTok{(OLS\_r2, }\DecValTok{3}\NormalTok{)))}
+  
+\NormalTok{poly\_model }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(y }\SpecialCharTok{\textasciitilde{}} \FunctionTok{poly}\NormalTok{(x, }\DecValTok{3}\NormalTok{), }\AttributeTok{data =}\NormalTok{ df)}
+\NormalTok{poly\_r2 }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(poly\_model)}\SpecialCharTok{$}\NormalTok{r.squared}
+\CommentTok{\# 多項式（3次）モデルによって当てはめ }
+\NormalTok{nonlinear }\OtherTok{\textless{}{-}}\NormalTok{ df }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(x, y)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =} \StringTok{"lm"}\NormalTok{,}\AttributeTok{formula =}\NormalTok{ y }\SpecialCharTok{\textasciitilde{}} \FunctionTok{poly}\NormalTok{(x, }\DecValTok{3}\NormalTok{), }\AttributeTok{se=}\ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ggtitle}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{"R\^{}2 = "}\NormalTok{, }\FunctionTok{round}\NormalTok{(poly\_r2, }\DecValTok{3}\NormalTok{)))}
+
+\CommentTok{\# 2つの図を並べて表示}
+\FunctionTok{grid.arrange}\NormalTok{(OLS, nonlinear, }\AttributeTok{ncol=}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `geom_smooth()` using formula = 'y ~ x'
+\end{verbatim}
+
+\includegraphics{13_1_モデルの適合度と複雑性_files/figure-latex/unnamed-chunk-2-1.pdf}
+グラフより、明らかにモデルの適合度がよくなっていることがわかる。
+
+現実に観測されるデータ\(\{X_i, Y_i\}\)は何らかのデータ生成モデル（線形回帰なら、\(Y_i = \beta X_i+\varepsilon_i\)など）に従って、データが生成されていると考えられる。このとき、データ生成モデルの複雑性が高いほど、データに当てはまりが良くなるが、未知のデータに対する予測性能は低くなる。このような現象を\textbf{過学習（overfitting）}と呼ぶ。過学習を防ぐためには、データ生成モデルの複雑性とデータに当てはまりの良さのバランスを考える必要がある。また、伝統的な計量経済学では、モデル当てはまりを良くすることが目的ではなく、パラメータの推定を目的としている。データ分析において以下の2つの文化がある。
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  科学理想主義・不偏性
+
+  この考え方は学術研究におけるものであり、経済学ではパラメータの不偏性や一致性、分散や平均に関心がある。例えば、古典的なOLSではいくつかの仮定を置いてその下でのOLS推定量はBLUEであることを示している（ガウス・マルコフの定理）。つまり、\(\hat{\beta}\)に興味がある。
+\item
+  実践主義・\(R^2\)・適合度・予測/アルゴリズム
+
+  この考え方は、学術研究でもあるがより実務で必要とされているものである。実務上では手元のデータから何か予測をしたいことが多くある。そのような場合にはパラメータの性質を気にすることはなく、訓練データで学習したモデルがテストデータでどれだけ当てはまりがいいかに大きな関心がある。つまり、\(\hat{y}\)。
+\end{enumerate}
+
+\hypertarget{ux7d4cux6e08ux5b66ux3067ux306eux5909ux9077}{%
+\subsection{経済学での変遷}\label{ux7d4cux6e08ux5b66ux3067ux306eux5909ux9077}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  ノン・パラメトリック（non-parametric）推定
+
+  \begin{itemize}
+  \tightlist
+  \item
+    誤った仮定（misspecification）を避けるため、データ生成モデルに特定の分布を仮定しない
+  \item
+    モデルの複雑性がサンプル数に応じて（ゆっくりと）増加する
+  \end{itemize}
+\item
+  機械学習（machine learning）
+
+  \begin{itemize}
+  \tightlist
+  \item
+    ビックデータ（画像、音声、テキストなど、デジタル・フットプリント）：3Vs（velocity,
+    volume,
+    variety）を使用することで精度の高いモデルの学習が可能になった
+  \item
+    人工知能（AI）：何が出力として正解かの明示的な答えを与えられずに、自ら学習していくモデル
+  \end{itemize}
+\end{enumerate}
+
+\textbf{モデル選択}：モデルの「複雑性」を上げれば当てはまりは良くなるが、過学習などの問題から「精度」が落ちる。そのため、これら2つの間にはトレードオフが存在する。そのため、必要最低限の仮定でモデルを立てることが必要（オッカムの剃刀）。また、「複雑性」が高くなるほど出力された結果の解釈が難しくなる。
+
+\textbf{モデル集計}：データから複数のモデルを学習させ、最も良い精度のモデルを採用する（多数決や平均などを計算）アンサンブル法（ensemble
+method）がある。例えば、ランダムフォレスト（random
+forest）や勾配ブースティング（gradient boosting）などがある。
+
+\hypertarget{ux9069ux5408ux5ea6ux306eux5206ux89e3ux3068ux8907ux96d1ux6027ux306eux6700ux9069ux5316}{%
+\section{適合度の分解と「複雑性」の最適化}\label{ux9069ux5408ux5ea6ux306eux5206ux89e3ux3068ux8907ux96d1ux6027ux306eux6700ux9069ux5316}}
+
+データ\(\{X_i, Y_i\}\)の生成モデルを以下のように仮定する。 \[
+Y_i = f(X_i) + \varepsilon_i
+\]
+ここで、\(f(X_i)\)は未知の関数であり、\(\varepsilon_i\)は誤差項である。このとき、\(f(X_i)\)を推定することが目的となる。例えば、\(f(X_i) = \beta_0 + \beta_1 X_i + \beta_2 X_i^2 + \ldots + \beta_k X_k + \varepsilon_i\)と仮定する。ここで、\(k\)はサンプル数。このモデルを先ほど生成したデータに当てはめてみると以下の通り。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# n次多項式モデル}
+\NormalTok{poly\_full }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(y }\SpecialCharTok{\textasciitilde{}} \FunctionTok{poly}\NormalTok{(x, n}\DecValTok{{-}1}\NormalTok{), }\AttributeTok{data =}\NormalTok{ df)}
+\NormalTok{poly\_full\_r2 }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(poly\_full)}\SpecialCharTok{$}\NormalTok{r.squared}
+\NormalTok{poly\_full\_plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(df, }\FunctionTok{aes}\NormalTok{(x, y)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =} \FunctionTok{predict}\NormalTok{(poly\_full)), }\AttributeTok{color =} \StringTok{"red"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ggtitle}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{"R\^{}2 = "}\NormalTok{, }\FunctionTok{round}\NormalTok{(poly\_full\_r2, }\DecValTok{3}\NormalTok{)))}
+
+\FunctionTok{grid.arrange}\NormalTok{(OLS, nonlinear, poly\_full\_plot, }\AttributeTok{ncol=}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `geom_smooth()` using formula = 'y ~ x'
+\end{verbatim}
+
+\includegraphics{13_1_モデルの適合度と複雑性_files/figure-latex/unnamed-chunk-3-1.pdf}
+
+これは、手元のデータについて\(y\)を\(x\)で完璧に説明できていることを示す。しかし、これは過学習が起きていて同じデータ生成過程から生じる別のデータセットに対しての当てはまりは良くない。
+
+\textbf{予測誤差のバイアス・バリアンス分解}：予測誤差は以下のように分解できる。
+\[
+\begin{align}
+\text{予測誤差}　&= E(Y_i-\hat{f}(X_i))^2\\
+&= E(f(X_i)+\varepsilon_i -\hat{f}(X_i) )^2\\
+&= E(f(X_i)- \hat{f}(X_i))^2 + E(\varepsilon_i^2) + 2E(f(X_i)- \hat{f}(X_i))E(\varepsilon_i)\\
+&= E(f(X_i)- \hat{f}(X_i))^2 + V(\varepsilon_i)\\
+&= E(f(X_i)-E(\hat{f}(X_i)^2)) + E(\hat{f}-E(\hat{f}(X_i)))^2 + 2E[f(X_i)-E(\hat{f}(X_i))] +V(\varepsilon_i)\\
+&= \text{バイアス}^2 + \text{バリアンス} + \text{ノイズ}
+\end{align}
+\]
+
+既知のデータ（訓練データ）に対してはモデルの複雑さが増すほどerrorは少なくなるが、未知のデータに対してはバリアンスが大きくなってしまうトレードオフが存在する。既知のデータに対して当てはまりをよくすれば（バイアスを減らす）するほど、未知のデータに対して当てはまりが悪くなる過学習が生じるため、損失関数にバイアスを入れることで適合度を改善する、正則化といった技術がある。
+
+\end{document}

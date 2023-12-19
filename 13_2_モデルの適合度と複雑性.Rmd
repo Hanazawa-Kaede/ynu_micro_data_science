@@ -1,0 +1,237 @@
+---
+title: "13（2）モデルの適合度と複雑性"
+# subtitle: "サブタイトル"
+author: '花澤楓 学籍番号: 2125242'
+date: "`r format(Sys.time(), '%Y/%m/%d')`"
+output: html_document
+---
+
+# 情報量とモデル適合度の尺度
+## 情報の量をどうやって測るか
+情報の量を測る尺度として、シャノンの情報量（Shannon's information）がある。これは、情報の量を確率の対数で測るものである。例えば、コインを投げて表が出る確率が0.5であるとき、表が出たという情報の量は、$-\log_2 0.5 = 1$となる。これは、表が出る確率が0.5であることを知ることで、情報の量が1ビット増えたことを意味する。また、コインを投げて表が出る確率が0.25であるとき、表が出たという情報の量は、$-\log_2 0.25 = 2$となる。これは、表が出る確率が0.25であることを知ることで、情報の量が2ビット増えたことを意味する。このように、情報の量は、確率の対数で測ることができる。シャノン情報量をSとすると、Sは以下のように定義される。
+$$
+\begin{aligned}
+&S = -\ln P(E)\\
+&ES = -E\ln P(E) = -\sum P(E)\ln P(E)
+\end{aligned}
+$$
+例えば、天気$\in${雨,晴}だとすると、$(P(天気=雨), P(天気=晴)) = (0.5, 0.5)$の時に最もシャノン情報量が多くなる。シャノン情報量においては「情報とは不確実性の解決である」としているためである。
+
+**logを取る理由：**
+
+確率の持つ性質、独立事象の加法性があることから$\ln$を取ると便利なためである。つまり、
+$$
+-\ln P(E_1 \cap E_2) = -\ln P(E_1) - \ln P(E_2)
+$$
+が成り立つため。
+
+## 情報量基準（information criteria）
+情報量基準とは、以下のように定義される。
+$$
+\underbrace{-E^X \ln f(X)}_{未知のデータへの誤差} = \underbrace{-\frac{\sum_i^N \ln f(X_i)}{N}}_{既知のデータへの誤差} + \underbrace{k\frac{C_n}{N}}_{罰則項}
+$$
+モデルのパラメータが増えるほど、情報量基準としては優れたものではないと判断される。ここで、
+
+- $C_n = 1$：Akaike IC(1973), $AIC = -2\sum \ln f(X_i) + 2k$
+- $C_n = \ln N$：Bayesian IC(1978), $BIC = -2\sum \ln f(X_i) + k\ln N$
+
+# 再標本抽出法（resampling method）とモデル適合度の測定
+再標本抽出法とは数値計算＋ランダム化を用いて、データの性質を調べる方法である。再標本抽出法には、以下のようなものがある。
+
+## ブートストラップ法（boot strap）Efron(1979)
+ブートストラップ法とは、統計量の標本分布を推定するために、Nの標本集団からNの標本を復元抽出する方法（i.e., 重複を許してresamplingする）。ブートストラップの利点は大きく2つある。
+
+1. 漸近的なリファインメント（refinement）
+    
+    これは、あるクラスの統計量について、ブートストラップによる近似の方が漸近分布による近似よりも精度の高い近似を与えることである。例えば、標準正規分布よりも、ブートストラップによって得られる近似分布の方がt統計量の厳密分布の良い近似になる。
+    
+2. 分布を理論的に求める必要がない
+
+    漸近分布を導出することが難しい統計量や、既知の漸近分布を持たない統計量についても、コンピュータを用いたシミュレーションによる分布を求めることができる。
+
+ブートストラップとは、ブーツのつまみの部分であり、「自力で成し遂げる（pull oneself up by one's bootstrap）」という意味もある。このブートストラップという名前は、与えられた標本をもとに自らのコピーを作り出す様を表現している。
+
+例えば、手元のNの標本から平均を計算し、それを再標本抽出によって複数回繰り返すことで標本平均の分布を求めることができる。同様に、標本分散と標準誤差を求めることができる。resampleの回数としては1000-100000回程度が一般的である。
+
+また、再標本抽出によって何%の標本を使っているのかについて計算することができる。あるサンプルをとってきて、そのサンプルが選ばれない確率は$1-1/N$であり、それがN回繰り返されるため、Nを大きくすると$(1-1/N)^N \to 1/e$となる。よって、何%の標本を使うのかについては、$1-1/e = 0.63$程度のサンプルを使用していることがわかる。
+
+## ジャックナイフ法（jack knife）Quenouille(1949)
+ジャックナイフ法とは、統計量の標本分布を推定するために、Nの標本集団からN-1の標本を非復元抽出する方法（i.e., 重複を許さずにresamplingする）。ジャックナイフ法は、ブートストラップ法と比べて、計算量が少なくて済むという利点がある。ジャックナイフ法は、ブートストラップ法の特別な場合として捉えることができる。
+
+
+## 交差検証法（cross validation; CV）
+交差検証法とは、汎化誤差を測定するために、標本をランダムにk分割し、(k-1)の訓練集合（training set）としてモデルを推定（学習）し、残り1つの検証集合（testing set）でそのモデルの妥当性を検証すること。k=1がスタンダード。データが特に少ない時には、データ数をNとした時にk=Nとすることがある。この得syな場合をleave-one-out method（1個抜き法）と呼ぶ。
+
+以下では、多項式回帰にL2正則化を適用し、CVによって最適なハイパーパラメータの値を求める。L2生息かとは、誤差関数を$E(x)$とした時に、パラメータの2乗和を誤差関数に加えたもので、
+$$
+\tilde{E}(x) = E(x) + \lambda \sum_{i=1}^N x_i^2
+$$
+で定義される。ここで、$\lambda$はハイパーパラメータであり、この誤差関数を最小にするようにCVによって$\lambda$を求める。まず、多項式の次数とハイパーパラメータの値によって当てはまりがどうなるかをプロットする。（RではうまくいかなかったのでPythonで実行。[参考url](https://colab.research.google.com/drive/1kiiNeVw3SAc9br5LgE8QPmbuvJ2LvKcj?usp=sharing#scrollTo=keEsvghkaiVb)：https://colab.research.google.com/drive/1kiiNeVw3SAc9br5LgE8QPmbuvJ2LvKcj?usp=sharing#scrollTo=keEsvghkaiVb）
+
+```{python}
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# sin(x)にホワイトノイズを加えたデータ
+def create_dataset(data_num, sigma=0.3):
+    X = np.linspace(0, 2*np.pi, num=data_num)
+    t = np.sin(X) + sigma * np.random.randn(data_num)
+    return X, t
+
+# t: 正解値，y: 予測値
+def RMSE(t, y):
+    return np.sqrt(np.mean((y - t)**2))
+
+def R2(t, y):
+    return 1 - np.sum((y - t)**2) / np.sum((t - np.mean(t))**2)
+
+def MAE(t, y):
+    return np.mean(np.abs(y - t))
+
+# リッジ回帰
+class LinearRegression(object):
+    # モデルの訓練
+    # X: 学習データの入力変数
+    # t: 学習データの目的変数
+    # lam: 正則化係数
+    def fit(self, X, t, lam=0.):
+        d = X.shape[1]
+        XX = np.dot(X.T, X)
+        # numpy.linalg.solveで解く
+        self.w = np.linalg.solve(XX + lam * np.identity(d), np.dot(X.T, t))
+
+    # 新しいデータの予測
+    # X: 入力変数
+    def predict(self, X):
+        return np.dot(X, self.w)
+      
+# 多項式
+# x^0 から x^(M-1)までの基底関数の値を返す
+class Polynomial(object):
+    def __init__(self, M=1):
+        self.M = M
+
+    # Xは （データ数 x 1）もしくは（データ数）のサイズの配列
+    def __call__(self, X):
+        return np.array([X.flatten()**i for i in range(self.M)]).T
+      
+      
+# 乱数シードの固定
+np.random.seed(1)
+
+# データの作成
+N = 20
+orgX, org_t = create_dataset(N)
+
+index = np.arange(N)
+np.random.shuffle(index)
+
+# 訓練データ（8割を訓練データに）
+X_train, t_train = orgX[index[:int(0.8*N)]], org_t[index[:int(0.8*N)]]
+# テスト用データ（残りの2割）
+X_test, t_test = orgX[index[int(0.8*N):]], org_t[index[int(0.8*N):]]
+
+# 訓練用データのプロット
+plt.scatter(X_train, t_train, marker='o', color='blue', label=None)
+# テスト用データのプロット
+plt.scatter(X_test, t_test, marker='o', color='red', label=None)
+# 真の曲線を表示
+XX, tt = create_dataset(100, sigma=0.)
+plt.plot(XX, tt, color='green', linestyle='--')
+plt.show()
+
+# モデルの学習と評価
+lams = [0.0, 0.1, 1.0, 10.0]  # 正則化係数
+Ms = [2, 3, 4, 6, 12]  # 次数
+
+plt.clf()
+fig = plt.figure(figsize=(16, 16))
+plt.subplots_adjust(hspace=0.4)
+
+i = 0
+for M in Ms:
+    for lam in lams:
+        # リッジ回帰モデルの学習
+        Phi = Polynomial(M=M)
+        lr_model = LinearRegression()
+        lr_model.fit(Phi(X_train), t_train, lam=lam)
+
+        # 予測曲線の取得
+        XX, tt = create_dataset(100, sigma=0.)
+        yy = lr_model.predict(Phi(XX))
+
+        # 予測値の計算
+        y_train = lr_model.predict(Phi(X_train))
+        y_test = lr_model.predict(Phi(X_test))
+
+        # プロット
+        subplt = fig.add_subplot(len(Ms), len(lams), i+1)
+        subplt.set_title('M=%d, lam=%.3f,\nTrainRMSE=%.2f, TestRMSE=%.2f'%(M, lam, RMSE(t_train, y_train), RMSE(t_test, y_test)))
+        subplt.scatter(X_train, t_train, marker='o', color='blue', label=None)
+        subplt.scatter(X_test, t_test, marker='o', color='red', label=None)
+        subplt.plot(XX, tt, color='green', linestyle='--')
+        subplt.plot(XX, yy, color='red')  # 予測曲線を表示
+
+        i += 1
+
+plt.show()
+```
+
+次に、交差検証を行う。
+
+```{python}
+from sklearn.model_selection import KFold
+# 交差検証（訓練データの中でCVを行う）
+kf = KFold(n_splits=5, shuffle=True, random_state=0)
+
+optM, optlam = 0, 0
+meanRMSE = np.inf
+
+for M in Ms:
+    for lam in lams:
+        rmse = []
+        for i, (train, valid) in enumerate(kf.split(X_train)):
+            # リッジ回帰モデルの学習
+            Phi = Polynomial(M=M)
+            lr_model = LinearRegression()
+            lr_model.fit(Phi(X_train[train]), t_train[train], lam=lam)
+
+            # Validationデータの予測値の計算
+            y_valid = lr_model.predict(Phi(X_train[valid]))
+
+            # 評価指標を計算
+            rmse.append(RMSE(t_train[valid], y_valid))
+        print('M=%d, lam=%.3f, Average RMSE=%.3f (%s)'%(M, lam, np.mean(rmse), rmse))
+        if meanRMSE > np.mean(rmse):
+            meanRMSE = np.mean(rmse)
+            optM, optlam = M, lam
+print('opt M=%d, opt lam=%.3f'%(optM, optlam))
+
+M = optM
+lam = optlam
+
+# 線形回帰モデルの学習（訓練データ全てを使う）
+Phi = Polynomial(M=M)
+lr_model = LinearRegression()
+lr_model.fit(Phi(X_train), t_train)
+
+# 予測曲線の取得
+XX, tt = create_dataset(100, sigma=0.)
+yy = lr_model.predict(Phi(XX))
+
+# プロット
+plt.title('M=%d'%(M))
+plt.scatter(X_train, t_train, marker='o', color='blue', label=None)
+plt.scatter(X_test, t_test, marker='o', color='red', label=None)
+plt.plot(XX, tt, color='green', linestyle='--')
+plt.plot(XX, yy, color='red')  # 予測曲線を表示
+plt.show()
+
+# 評価指標の表示
+y_train = lr_model.predict(Phi(X_train))
+y_test = lr_model.predict(Phi(X_test))
+print('（学習データ）RMSE: %.3f, MAE: %.3f, R2: %.3f'%(RMSE(t_train, y_train), MAE(t_train, y_train), R2(t_train, y_train)))
+print('（テストデータ）RMSE: %.3f, MAE: %.3f, R2: %.3f'%(RMSE(t_test, y_test), MAE(t_test, y_test), R2(t_test, y_test)))
+```
+CVの結果、次数は6、ハイパーパラメータの値は0が最も当てはまりが良いことがわかった。
